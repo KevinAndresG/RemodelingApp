@@ -2,35 +2,49 @@ import { useInView } from "react-intersection-observer";
 import projectsRef from "../../assets/kitchen.jpg";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { useState } from "react";
+import { ProjectModel } from "../../Core/Models/Projects";
+import ProjectDetails from "../Shared/ProjectsDetails/ProjectDetail";
+
+const projects: ProjectModel[] = [
+  {
+    title: "Cocina Moderna",
+    image: projectsRef,
+    description: "Diseño contemporáneo con acabados de alta gama.",
+    details:
+      "Esta cocina moderna combina funcionalidad y estilo con encimeras de cuarzo, gabinetes de madera de nogal, y electrodomésticos de acero inoxidable. La isla central proporciona espacio adicional para cocinar y socializar, mientras que la iluminación LED bajo los gabinetes crea un ambiente acogedor.",
+  },
+  {
+    title: "Baño de Lujo",
+    image: projectsRef,
+    description: "Espacio de relajación con detalles elegantes.",
+    details:
+      "Este baño de lujo presenta una amplia ducha de vidrio sin marco, una bañera independiente, y un tocador doble con encimeras de mármol. Los azulejos de gran formato y la iluminación ambiental crean una atmósfera de spa, perfecta para relajarse después de un largo día.",
+  },
+  {
+    title: "Sala de Estar Elegante",
+    image: projectsRef,
+    description: "Ambiente acogedor y sofisticado para el hogar.",
+    details:
+      "Esta sala de estar elegante combina comodidad y estilo con un sofá seccional de cuero, sillas de acento modernas y una chimenea de gas. Los tonos neutros se complementan con toques de color en los accesorios, creando un espacio acogedor y sofisticado para la familia y los invitados.",
+  },
+  {
+    title: "Dormitorio Acogedor",
+    image: projectsRef,
+    description: "Diseño sereno y confortable para el descanso.",
+    details:
+      "Este dormitorio acogedor ofrece un refugio tranquilo con una paleta de colores suaves, textiles lujosos y muebles de madera cálida. El cabecero tapizado y las cortinas blackout aseguran un sueño reparador, mientras que el área de lectura junto a la ventana proporciona un espacio para relajarse.",
+  },
+];
 
 function ProjectsSection() {
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
   });
-
-  const projects = [
-    {
-      title: "Cocina Moderna",
-      image: projectsRef,
-      description: "Diseño contemporáneo con acabados de alta gama.",
-    },
-    {
-      title: "Baño de Lujo",
-      image: projectsRef,
-      description: "Espacio de relajación con detalles elegantes.",
-    },
-    {
-      title: "Sala de Estar Elegante",
-      image: projectsRef,
-      description: "Ambiente acogedor y sofisticado para el hogar.",
-    },
-    {
-      title: "Dormitorio Acogedor",
-      image: projectsRef,
-      description: "Diseño sereno y confortable para el descanso.",
-    },
-  ];
+  const [selectedProject, setSelectedProject] = useState<ProjectModel | null>(
+    null
+  );
 
   return (
     <section
@@ -70,17 +84,25 @@ function ProjectsSection() {
                   {project.title}
                 </h3>
                 <p className="text-gray-600 mb-4">{project.description}</p>
-                <a
-                  href="#"
-                  className="text-blue-500 hover:text-blue-600 transition-colors duration-300 flex items-center"
+                <button
+                  onClick={() => setSelectedProject(project)}
+                  className="text-blue-500 hover:text-blue-800 transition-colors duration-200"
                 >
-                  Ver detalles <ArrowRight className="ml-2 w-4 h-4" />
-                </a>
+                  <p className="font-bold text-sm flex items-center">
+                    Ver detalles <ArrowRight className="ml-2 w-4 h-4" />
+                  </p>
+                </button>
               </div>
             </motion.div>
           ))}
         </div>
       </div>
+      {selectedProject && (
+        <ProjectDetails
+          selectedProject={selectedProject}
+          setSelectedProject={setSelectedProject}
+        />
+      )}
     </section>
   );
 }

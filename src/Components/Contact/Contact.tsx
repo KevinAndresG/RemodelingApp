@@ -21,7 +21,7 @@ function ContactSection() {
                 type="text"
                 id="name"
                 name="name"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md outline-none focus:border-blue-500"
                 required
               />
             </div>
@@ -36,7 +36,7 @@ function ContactSection() {
                 type="email"
                 id="email"
                 name="email"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md outline-none focus:border-blue-500"
                 required
               />
             </div>
@@ -51,7 +51,7 @@ function ContactSection() {
                 id="message"
                 name="message"
                 rows={4}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md outline-none focus:border-blue-500"
                 required
               ></textarea>
             </div>

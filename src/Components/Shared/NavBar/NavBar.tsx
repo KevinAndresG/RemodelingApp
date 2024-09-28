@@ -33,7 +33,7 @@ const NavBar = ({
       >
         <motion.a
           href="#"
-          className="text-xl font-bold text-gray-900"
+          className="text-3xl font-bold text-gray-900"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
@@ -80,7 +80,7 @@ const NavBar = ({
                 alt="Avatar"
                 className="w-8 h-8 mr-2 rounded-full object-cover object-top"
               />
-              <p className="overflow-ellipsis overflow-hidden whitespace-nowrap w-36">
+              <p className="overflow-ellipsis overflow-hidden whitespace-nowrap max-w-36">
                 {loggedInUser.name}
               </p>
             </button>

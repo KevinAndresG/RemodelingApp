@@ -2,6 +2,7 @@ import { Camera, Mail, MapPin, Phone, User, X } from "lucide-react";
 import { UserModel } from "../../Core/Models/User";
 import { useState } from "react";
 import { Testimonial } from "../../Core/Models/Testimonial";
+import ProfileForm from "../Shared/ProfileForm/ProfileForm";
 
 function UserProfile({
   user,
@@ -103,88 +104,11 @@ function UserProfile({
         </div>
         <div className="md:w-2/3 md:pl-8">
           {isEditing ? (
-            <form onSubmit={handleSubmit}>
-              <div className="mb-4">
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Nombre
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={userData.name}
-                  onChange={(e) =>
-                    setUserData({ ...userData, name: e.target.value })
-                  }
-                  className="shadow-sm focus:ring-blue-500 focus:border-blue-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md p-3"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={userData.email}
-                  onChange={(e) =>
-                    setUserData({ ...userData, email: e.target.value })
-                  }
-                  className="shadow-sm focus:ring-blue-500 focus:border-blue-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md p-3"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label
-                  htmlFor="phone"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Teléfono
-                </label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={userData.phone}
-                  onChange={(e) =>
-                    setUserData({ ...userData, phone: e.target.value })
-                  }
-                  className="shadow-sm focus:ring-blue-500 focus:border-blue-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md p-3"
-                />
-              </div>
-              <div className="mb-4">
-                <label
-                  htmlFor="address"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Dirección
-                </label>
-                <input
-                  type="text"
-                  id="address"
-                  name="address"
-                  value={userData.address}
-                  onChange={(e) =>
-                    setUserData({ ...userData, address: e.target.value })
-                  }
-                  className="shadow-sm focus:ring-blue-500 focus:border-blue-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md p-3"
-                />
-              </div>
-              <button
-                type="submit"
-                className="w-full bg-blue-500 text-white font-bold py-3 px-4 rounded hover:bg-blue-600 transition duration-300"
-              >
-                Guardar Cambios
-              </button>
-            </form>
+            <ProfileForm
+              handleSubmit={handleSubmit}
+              userData={userData}
+              setUserData={setUserData}
+            />
           ) : (
             <div className="space-y-4">
               <div className="flex items-center">

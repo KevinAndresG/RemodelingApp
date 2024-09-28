@@ -4,8 +4,9 @@ import { UserModel } from "../../Core/Models/User";
 import userImage2 from "../../assets/perfil-2.webp";
 import { motion } from "framer-motion";
 import { Testimonial } from "../../Core/Models/Testimonial";
-import { MessageSquare, Star } from "lucide-react";
+import { Edit, MessageSquare, Star } from "lucide-react";
 import CommentForm from "../Shared/CommentForm/CommentForm";
+import { CommentNew } from "../../Core/Models/Comment";
 
 function TestimonialsSection({ user }: { user: UserModel }) {
   const [ref, inView] = useInView({
@@ -19,6 +20,7 @@ function TestimonialsSection({ user }: { user: UserModel }) {
       ? JSON.parse(savedTestimonials)
       : [
           {
+            id: 1,
             name: "María García",
             text: "RemodeFlyt transformó nuestra cocina anticuada en un espacio moderno y funcional. ¡Estamos encantados con el resultado!",
             rating: 5,
@@ -26,6 +28,7 @@ function TestimonialsSection({ user }: { user: UserModel }) {
             userId: 2,
           },
           {
+            id: 2,
             name: "Juan Pérez",
             text: "El equipo de RemodeFlyt fue profesional y eficiente. Nuestra remodelación del baño se completó a tiempo y dentro del presupuesto.",
             rating: 4,
@@ -33,6 +36,7 @@ function TestimonialsSection({ user }: { user: UserModel }) {
             userId: 3,
           },
           {
+            id: 3,
             name: "Ana Martínez",
             text: "La atención al detalle y la calidad del trabajo de RemodeFlyt superaron nuestras expectativas. Definitivamente los recomendaremos.",
             rating: 5,
@@ -43,17 +47,13 @@ function TestimonialsSection({ user }: { user: UserModel }) {
   });
 
   const [showCommentForm, setShowCommentForm] = useState(false);
+  const [editingTestimonial, setEditingTestimonial] =
+    useState<Testimonial | null>(null);
 
-  useEffect(() => {
-    localStorage.setItem("testimonials", JSON.stringify(testimonials));
-  }, [testimonials]);
-
-  const handleNewComment = (newComment: {
-    comment: string;
-    rating: number;
-  }) => {
-    const updatedTestimonials = [
+  const handleNewComment = (newComment: CommentNew) => {
+    const newTestimonials = [
       {
+        id: newComment.id + testimonials.length,
         name: user.name,
         text: newComment.comment,
         rating: newComment.rating,
@@ -62,9 +62,24 @@ function TestimonialsSection({ user }: { user: UserModel }) {
       },
       ...testimonials,
     ];
-    setTestimonials(updatedTestimonials);
+    setTestimonials(newTestimonials);
     setShowCommentForm(false);
   };
+
+  const handleEditComment = (editedComment: CommentNew) => {
+    console.log("editedComment: ", editedComment);
+    const updatedTestimonials = testimonials.map((t: Testimonial) =>
+      t.id === editedComment.id
+        ? { ...t, text: editedComment.comment, rating: editedComment.rating }
+        : t
+    );
+    setTestimonials(updatedTestimonials);
+    setEditingTestimonial(null);
+  };
+
+  useEffect(() => {
+    localStorage.setItem("testimonials", JSON.stringify(testimonials));
+  }, [testimonials]);
 
   return (
     <section
@@ -84,11 +99,22 @@ function TestimonialsSection({ user }: { user: UserModel }) {
           {testimonials.map((testimonial: Testimonial, index: number) => (
             <motion.div
               key={`${testimonial.name}-${index}`}
-              className="bg-white p-4 h-80 break-words overflow-hidden overflow-ellipsis rounded-lg shadow-lg hover:shadow-md transition-shadow duration-200 border border-gray-200"
+              className="bg-white relative p-4 h-80 break-words overflow-hidden overflow-ellipsis rounded-lg shadow-lg hover:shadow-md transition-shadow duration-200 border border-gray-200"
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: index * 0.1 }}
             >
+              {testimonial.userId === user.id && (
+                <button
+                  onClick={() => {
+                    setEditingTestimonial(testimonial);
+                  }}
+                  className="text-blue-500 hover:text-blue-800 transition-colors duration-200 flex items-center absolute bottom-1 right-3"
+                >
+                  <Edit className="w-3 h-3 mr-1" />{" "}
+                  <p className="text-sm font-bold">Editar</p>
+                </button>
+              )}
               <div className="flex items-center gap-4 mb-4 w-full">
                 <img
                   src={testimonial.image}
@@ -125,7 +151,7 @@ function TestimonialsSection({ user }: { user: UserModel }) {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="flex justify-center"
         >
-          {!showCommentForm ? (
+          {!showCommentForm && !editingTestimonial && (
             <button
               onClick={() => setShowCommentForm(true)}
               className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 transition duration-300 flex items-center"
@@ -133,11 +159,18 @@ function TestimonialsSection({ user }: { user: UserModel }) {
               <MessageSquare className="mr-2" />
               Dejar un comentario
             </button>
-          ) : (
+          )}
+          {(showCommentForm || editingTestimonial) && (
             <CommentForm
-              handleNewComment={handleNewComment}
+              onCommentSubmit={
+                editingTestimonial ? handleEditComment : handleNewComment
+              }
               user={user}
-              onClose={() => setShowCommentForm(false)}
+              onClose={() => {
+                setShowCommentForm(false);
+                setEditingTestimonial(null);
+              }}
+              initialComment={editingTestimonial}
             />
           )}
         </motion.div>
